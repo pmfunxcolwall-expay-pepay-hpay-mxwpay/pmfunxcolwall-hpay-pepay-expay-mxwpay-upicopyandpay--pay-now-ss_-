@@ -34,7 +34,7 @@
     .help{display:flex;align-items:center;gap:8px;color:var(--blue);margin:20px 0;font-weight:600;}
     .help .dot{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;}
     
-    /* Logos rectangle grid (no background box, each logo in its own rectangle) */
+    /* Logos rectangle grid */
     .logos-box{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -43,7 +43,7 @@
       margin:20px 0;
     }
     .logos-box img{
-      width:140px; /* bigger size */
+      width:140px;
       height:80px;
       object-fit:contain;
       background:#fff;
@@ -60,7 +60,7 @@
     .notice{margin:20px 0;font-size:.92rem;line-height:1.45;}
     .notice .red{color:var(--red);font-weight:800;}
     
-    /* Bottom logos inline center (smaller size) */
+    /* Bottom logos inline */
     .bottom-logos{
       border-top:1px solid #e5e7eb;
       background:#fafbff;
@@ -74,6 +74,25 @@
       width:50px;
       height:30px;
       object-fit:contain;
+    }
+
+    /* Toast box */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--blue);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 9999;
+    }
+    .toast.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -99,7 +118,7 @@
           <button class="copy-btn" id="copy-upi">COPY</button>
         </div>
       </div>
-      <div class="help"><div class="dot">?</div><div>How to transfer money 🔗</div></div>
+      <div class="help"><div class="dot">?</div><div>How to transfer money 💳</div></div>
       
       <!-- Logos rectangle grid -->
       <div class="logos-box">
@@ -129,6 +148,9 @@
       <img src="./bhim-icon.png" alt="BHIM UPI">
     </div>
   </div>
+
+  <!-- Toast element -->
+  <div id="toast" class="toast"></div>
   
   <script>
     const FULL_UPI="60625854@axl";
@@ -137,16 +159,25 @@
     document.getElementById("upi-mask").textContent=MASKED_UPI;
     document.getElementById("amount").textContent=AMOUNT_TEXT;
 
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2000);
+    }
+
     document.getElementById("copy-amount").addEventListener("click", () => {
       navigator.clipboard.writeText(AMOUNT_TEXT).then(() => {
-        alert("Amount copied: " + AMOUNT_TEXT);
-      }).catch(err => alert("Copy failed: " + err));
+        showToast("Amount copied!");
+      }).catch(err => showToast("Copy failed"));
     });
 
     document.getElementById("copy-upi").addEventListener("click", () => {
       navigator.clipboard.writeText(FULL_UPI).then(() => {
-        alert("UPI copied: " + FULL_UPI);
-      }).catch(err => alert("Copy failed: " + err));
+        showToast("UPI copied!");
+      }).catch(err => showToast("Copy failed"));
     });
 
     document.getElementById("submit-utr").addEventListener("click",()=>{
@@ -159,9 +190,4 @@
     setInterval(()=>{
       const m=Math.floor(timeLeft/60),s=timeLeft%60;
       countdownEl.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-      if(timeLeft>0)timeLeft--;
-    },1000);
-  </script>
-</body>
-
-</html>
+      if(timeLeft>0)
