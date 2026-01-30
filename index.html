@@ -5,94 +5,109 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Payment</title>
   <style>
-    :root{
-      --blue:#1f6feb;
-      --bg:#f4f6fb;
-      --card:#ffffff;
-      --text:#0f172a;
-      --red:#e11d48;
+    :root {
+      --blue: #1f6feb;
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --text: #0f172a;
+      --red: #e11d48;
+      --success: #10b981;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      background:var(--bg);
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
-    .wrap{flex:1;display:flex;flex-direction:column;background:var(--card);}
-    .header{background:var(--blue);color:#fff;text-align:center;padding:20px;font-weight:700;font-size:1.3rem;}
-    .section{flex:1;padding:20px;}
-    .timer-row{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:16px;}
-    .timer-row .label{color:#fff;background:var(--blue);padding:6px 10px;border-radius:8px;}
-    .timer-row .time{color:var(--blue);font-weight:800;}
-    .row{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fafbff;}
-    .row .left{font-weight:700;}
-    .row .right{display:flex;align-items:center;gap:8px;}
-    .value{font-weight:700;}
-    .copy-btn{padding:6px 10px;font-size:.78rem;font-weight:700;border:0;border-radius:8px;background:var(--blue);color:#fff;cursor:pointer;}
-    .help{display:flex;align-items:center;gap:8px;color:var(--blue);margin:20px 0;font-weight:600;}
-    .help .dot{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;}
+    .wrap { flex: 1; display: flex; flex-direction: column; background: var(--card); }
+    .header { background: var(--blue); color: #fff; text-align: center; padding: 20px; font-weight: 700; font-size: 1.3rem; }
+    .section { flex: 1; padding: 20px; }
+    .timer-row { display: flex; justify-content: space-between; align-items: center; font-weight: 600; margin-bottom: 16px; }
+    .timer-row .label { color: #fff; background: var(--blue); padding: 6px 10px; border-radius: 8px; }
+    .timer-row .time { color: var(--blue); font-weight: 800; }
+    .row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; margin-bottom: 12px; background: #fafbff; }
+    .row .left { font-weight: 700; }
+    .row .right { display: flex; align-items: center; gap: 8px; }
+    .value { font-weight: 700; }
+    .copy-btn { padding: 6px 10px; font-size: .78rem; font-weight: 700; border: 0; border-radius: 8px; background: var(--blue); color: #fff; cursor: pointer; }
+    .help { display: flex; align-items: center; gap: 8px; color: var(--blue); margin: 20px 0; font-weight: 600; }
+    .help .dot { width: 22px; height: 22px; border-radius: 50%; background: var(--blue); color: #fff; display: grid; place-items: center; font-weight: 800; }
     
-    /* Logos rectangle grid */
-    .logos-box{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:20px;
-      justify-items:center;
-      margin:20px 0;
+    .logos-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      justify-items: center;
+      margin: 20px 0;
     }
-    .logos-box img{
-      width:140px;
-      height:80px;
-      object-fit:contain;
-      background:#fff;
-      border:1px solid #ddd;
-      border-radius:10px;
-      padding:10px;
+    .logos-box img {
+      width: 140px;
+      height: 80px;
+      object-fit: contain;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
     }
 
-    .utr-wrap{margin-top:10px;}
-    .utr-label{font-weight:700;margin-bottom:6px;}
-    .utr-input{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px;}
-    .submit{margin-top:10px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;}
-    .message{margin-top:8px;text-align:center;font-weight:700;color:var(--red);}
-    .notice{margin:20px 0;font-size:.92rem;line-height:1.45;}
-    .notice .red{color:var(--red);font-weight:800;}
+    .utr-wrap { margin-top: 10px; }
+    .utr-label { font-weight: 700; margin-bottom: 6px; }
+    .utr-input { width: 100%; padding: 10px; border: 1px solid #e5e7eb; border-radius: 10px; }
+    .submit { margin-top: 10px; width: 100%; padding: 12px; border: 0; border-radius: 10px; background: var(--blue); color: #fff; font-weight: 800; cursor: pointer; }
+    .message { margin-top: 8px; text-align: center; font-weight: 700; color: var(--red); }
+    .notice { margin: 20px 0; font-size: .92rem; line-height: 1.45; }
+    .notice .red { color: var(--red); font-weight: 800; }
     
-    /* Bottom logos inline */
-    .bottom-logos{
-      border-top:1px solid #e5e7eb;
-      background:#fafbff;
-      padding:20px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      gap:25px;
+    .bottom-logos {
+      border-top: 1px solid #e5e7eb;
+      background: #fafbff;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
     }
-    .bottom-logos img{
-      width:50px;
-      height:30px;
-      object-fit:contain;
+    .bottom-logos img {
+      width: 50px;
+      height: 30px;
+      object-fit: contain;
     }
 
-    /* Toast box */
-    .toast {
+    /* Toast */
+    #toast-container {
       position: fixed;
-      bottom: 20px;
+      top: 20px;
       right: 20px;
-      background: var(--blue);
-      color: #fff;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-weight: 700;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-      opacity: 0;
-      transition: opacity 0.3s ease;
       z-index: 9999;
+      pointer-events: none;
+    }
+    .toast {
+      background: #1e293b;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+      min-width: 220px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateX(120%);
+      transition: all 0.4s ease;
     }
     .toast.show {
       opacity: 1;
+      transform: translateX(0);
+    }
+    .toast.success {
+      background: var(--success);
+    }
+    .toast i {
+      font-size: 1.4rem;
     }
   </style>
 </head>
@@ -107,20 +122,19 @@
       <div class="row">
         <div class="left">Amount</div>
         <div class="right">
-          <div id="amount" class="value">₹2500</div>
+          <div id="amount" class="value">₹11000</div>
           <button class="copy-btn" id="copy-amount">COPY</button>
         </div>
       </div>
       <div class="row">
         <div class="left">VPA/UPI ID</div>
         <div class="right">
-          <div id="upi-mask" class="value">ksada****@axl</div>
+          <div id="upi-mask" class="value">ksada@axl</div>
           <button class="copy-btn" id="copy-upi">COPY</button>
         </div>
       </div>
-      <div class="help"><div class="dot">?</div><div>How to transfer money 💳</div></div>
+      <div class="help"><div class="dot">?</div><div>How to transfer money 🔗</div></div>
       
-      <!-- Logos rectangle grid -->
       <div class="logos-box">
         <img src="./phonepe-icon.png" alt="PhonePe">
         <img src="./paytm-icon.png" alt="Paytm">
@@ -140,7 +154,6 @@
       </div>
     </div>
     
-    <!-- Bottom logos inline -->
     <div class="bottom-logos">
       <img src="./phonepe-icon.png" alt="PhonePe">
       <img src="./paytm-icon.png" alt="Paytm">
@@ -149,45 +162,76 @@
     </div>
   </div>
 
-  <!-- Toast element -->
-  <div id="toast" class="toast"></div>
-  
-  <script>
-    const FULL_UPI="60625854@axl";
-    const MASKED_UPI="6062****@axl";
-    const AMOUNT_TEXT="₹****";
-    document.getElementById("upi-mask").textContent=MASKED_UPI;
-    document.getElementById("amount").textContent=AMOUNT_TEXT;
+  <div id="toast-container"></div>
 
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-      toast.textContent = message;
-      toast.classList.add("show");
+  <script>
+    const FULL_UPI = "60625854@axl";
+    const MASKED_UPI = "6062****@axl";
+    const AMOUNT_TEXT = "₹****";
+
+    document.getElementById("upi-mask").textContent = MASKED_UPI;
+    document.getElementById("amount").textContent = AMOUNT_TEXT;
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `<i class="ri-checkbox-circle-fill"></i> ${message}`;
+      container.appendChild(toast);
+
+      setTimeout(() => toast.classList.add('show'), 100);
       setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2000);
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 400);
+      }, 3000);
     }
 
     document.getElementById("copy-amount").addEventListener("click", () => {
-      navigator.clipboard.writeText(AMOUNT_TEXT).then(() => {
-        showToast("Amount copied!");
-      }).catch(err => showToast("Copy failed"));
+      const cleanAmount = AMOUNT_TEXT.replace('₹', '').trim();
+      navigator.clipboard.writeText(cleanAmount).then(() => {
+        showToast("Amount copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("Failed to copy amount", "error");
+      });
     });
 
     document.getElementById("copy-upi").addEventListener("click", () => {
       navigator.clipboard.writeText(FULL_UPI).then(() => {
-        showToast("UPI copied!");
-      }).catch(err => showToast("Copy failed"));
+        showToast("UPI ID copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("Failed to copy UPI", "error");
+      });
     });
 
-    document.getElementById("submit-utr").addEventListener("click",()=>{
-      const utr=document.getElementById("utr").value.trim();
-      document.getElementById("message").textContent=utr?"UTR submitted successfully!":"Please make the payment first";
+    document.getElementById("submit-utr").addEventListener("click", () => {
+      const utr = document.getElementById("utr").value.trim();
+      document.getElementById("message").textContent = utr ? "UTR submitted successfully!" : "Please make the payment first";
     });
 
-    let timeLeft=10*60;
-    const countdownEl=document.getElementById("countdown");
-    setInterval(()=>{
-      const m=Math.floor(timeLeft/60),s=timeLeft%60;
-      countdownEl.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-      if(timeLeft>0)
+    // Timer - properly working version
+    let timeLeft = 10 * 60;
+    const countdownEl = document.getElementById("countdown");
+
+    function updateCountdown() {
+      if (timeLeft <= 0) {
+        countdownEl.textContent = "00:00";
+        return;
+      }
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      countdownEl.textContent = minutes.toString().padStart(2, '0') + ':' + seconds.toString().padStart(2, '0');
+    }
+
+    updateCountdown(); // initial display
+
+    const timer = setInterval(() => {
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        return;
+      }
+      timeLeft--;
+      updateCountdown();
+    }, 1000);
+  </script>
+</body>
+</html>
