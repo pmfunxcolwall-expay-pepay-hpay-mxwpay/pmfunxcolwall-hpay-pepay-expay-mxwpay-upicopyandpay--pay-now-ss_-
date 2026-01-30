@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment</title>
+  <style>
+    :root{
+      --blue:#1f6feb;
+      --bg:#f4f6fb;
+      --card:#ffffff;
+      --text:#0f172a;
+      --red:#e11d48;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{
+      background:var(--bg);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    .wrap{flex:1;display:flex;flex-direction:column;background:var(--card);}
+    .header{background:var(--blue);color:#fff;text-align:center;padding:20px;font-weight:700;font-size:1.3rem;}
+    .section{flex:1;padding:20px;}
+    .timer-row{display:flex;justify-content:space-between;align-items:center;font-weight:600;margin-bottom:16px;}
+    .timer-row .label{color:#fff;background:var(--blue);padding:6px 10px;border-radius:8px;}
+    .timer-row .time{color:var(--blue);font-weight:800;}
+    .row{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid #e5e7eb;border-radius:10px;margin-bottom:12px;background:#fafbff;}
+    .row .left{font-weight:700;}
+    .row .right{display:flex;align-items:center;gap:8px;}
+    .value{font-weight:700;}
+    .copy-btn{padding:6px 10px;font-size:.78rem;font-weight:700;border:0;border-radius:8px;background:var(--blue);color:#fff;cursor:pointer;}
+    .help{display:flex;align-items:center;gap:8px;color:var(--blue);margin:20px 0;font-weight:600;}
+    .help .dot{width:22px;height:22px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;}
+    
+    /* Logos rectangle grid (no background box, each logo in its own rectangle) */
+    .logos-box{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+      justify-items:center;
+      margin:20px 0;
+    }
+    .logos-box img{
+      width:140px; /* bigger size */
+      height:80px;
+      object-fit:contain;
+      background:#fff;
+      border:1px solid #ddd;
+      border-radius:10px;
+      padding:10px;
+    }
+
+    .utr-wrap{margin-top:10px;}
+    .utr-label{font-weight:700;margin-bottom:6px;}
+    .utr-input{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px;}
+    .submit{margin-top:10px;width:100%;padding:12px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:800;cursor:pointer;}
+    .message{margin-top:8px;text-align:center;font-weight:700;color:var(--red);}
+    .notice{margin:20px 0;font-size:.92rem;line-height:1.45;}
+    .notice .red{color:var(--red);font-weight:800;}
+    
+    /* Bottom logos inline center (smaller size) */
+    .bottom-logos{
+      border-top:1px solid #e5e7eb;
+      background:#fafbff;
+      padding:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:25px;
+    }
+    .bottom-logos img{
+      width:50px;
+      height:30px;
+      object-fit:contain;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header">Payment</div>
+    <div class="section">
+      <div class="timer-row">
+        <div class="label">Order will be closed:</div>
+        <div id="countdown" class="time">10:00</div>
+      </div>
+      <div class="row">
+        <div class="left">Amount</div>
+        <div class="right">
+          <div id="amount" class="value">₹2500</div>
+          <button class="copy-btn" id="copy-amount">COPY</button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="left">VPA/UPI ID</div>
+        <div class="right">
+          <div id="upi-mask" class="value">ksada****@axl</div>
+          <button class="copy-btn" id="copy-upi">COPY</button>
+        </div>
+      </div>
+      <div class="help"><div class="dot">?</div><div>How to transfer money 🔗</div></div>
+      
+      <!-- Logos rectangle grid -->
+      <div class="logos-box">
+        <img src="./phonepe-icon.png" alt="PhonePe">
+        <img src="./paytm-icon.png" alt="Paytm">
+        <img src="./gpay-icon.png" alt="Google Pay">
+        <img src="./bhim-icon.png" alt="BHIM UPI">
+      </div>
+      
+      <div class="utr-wrap">
+        <div class="utr-label">UTR</div>
+        <input id="utr" class="utr-input" type="text" placeholder="Input UTR number" />
+        <button class="submit" id="submit-utr">Submit UTR</button>
+        <div id="message" class="message"></div>
+      </div>
+      <div class="notice">
+        <div><span class="red">One UPI</span> can only transfer money <span class="red">once</span>.</div>
+        <div>Don't change the <span class="red">payment amount</span>. Otherwise, the order cannot be closed.</div>
+      </div>
+    </div>
+    
+    <!-- Bottom logos inline -->
+    <div class="bottom-logos">
+      <img src="./phonepe-icon.png" alt="PhonePe">
+      <img src="./paytm-icon.png" alt="Paytm">
+      <img src="./gpay-icon.png" alt="Google Pay">
+      <img src="./bhim-icon.png" alt="BHIM UPI">
+    </div>
+  </div>
+  
+  <script>
+    const FULL_UPI="222999555@axl";
+    const MASKED_UPI="222999****@axl";
+    const AMOUNT_TEXT="₹11000";
+    document.getElementById("upi-mask").textContent=MASKED_UPI;
+    document.getElementById("amount").textContent=AMOUNT_TEXT;
+
+    document.getElementById("copy-amount").addEventListener("click", () => {
+      navigator.clipboard.writeText(AMOUNT_TEXT).then(() => {
+        alert("Amount copied: " + AMOUNT_TEXT);
+      }).catch(err => alert("Copy failed: " + err));
+    });
+
+    document.getElementById("copy-upi").addEventListener("click", () => {
+      navigator.clipboard.writeText(FULL_UPI).then(() => {
+        alert("UPI copied: " + FULL_UPI);
+      }).catch(err => alert("Copy failed: " + err));
+    });
+
+    document.getElementById("submit-utr").addEventListener("click",()=>{
+      const utr=document.getElementById("utr").value.trim();
+      document.getElementById("message").textContent=utr?"UTR submitted successfully!":"Please make the payment first";
+    });
+
+    let timeLeft=10*60;
+    const countdownEl=document.getElementById("countdown");
+    setInterval(()=>{
+      const m=Math.floor(timeLeft/60),s=timeLeft%60;
+      countdownEl.textContent=`${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+      if(timeLeft>0)timeLeft--;
+    },1000);
+  </script>
+</body>
+</html>
